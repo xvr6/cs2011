@@ -17,7 +17,7 @@
 - 16: **Hexadecimal**
   - Usually begins with the prefix `0x`
   - From right to left: 16^0, 16^1, 16^2, 16^3......
-  - 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F
+  - 0,1,2,3,4,5,6,7,8,9,A(10),B(11),C(12),D(13),E(14),F(15)
   - A number like "F3A" is equal to: 16(16^2) + 3(16^1) + 10(16^0)
 - Comparison:
   - Using base 2 compared to base 16, 2^8 = 256 = 16^2
