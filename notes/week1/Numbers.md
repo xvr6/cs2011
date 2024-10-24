@@ -21,4 +21,4 @@
   - A number like "F3A" is equal to: 16(16^2) + 3(16^1) + 10(16^0)
 - Comparison:
   - Using base 2 compared to base 16, 2^8 = 256 = 16^2
-  - we need 9 values (2^0 through 2^8) in binary to express what we would need three values for in hexadecimal 
+  - we need 9 values (2^0 through 2^8) in binary to express what we would need three values for in hexadecimal
