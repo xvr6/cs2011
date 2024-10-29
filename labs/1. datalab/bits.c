@@ -314,8 +314,17 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {  
-  return ~(x ^ 1);
 
+  /*
+  The first part of this function (x | (~x + 1)) |s x to its negation.
+  This is done as with every number but 0, on a ~ operation, the sign bit will flip. 
+    * 1-1010101 | (~1-1010101 + 1) = 1-1010101 | 0-0101011 = 1-1111111.
+    * 0000      | (~0100 + 1)      = 0000     | 0100       = 0100
+  We then right shift 31 times to have the rignbit in the lowest position possible. 
+  1 is then added to change the value to true if it is 0.
+  */
+
+  return ((x | (~x + 1)) >> 31) + 1;
 }
 
 /* howManyBits - return the minimum number of bits required to represent x in
