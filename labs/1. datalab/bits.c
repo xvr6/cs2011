@@ -1,7 +1,7 @@
 /* 
  * CS:APP Data Lab 
  * 
- * <Please put your name and userid here>
+ * Xavier Bonavita | mlbonavita@wpi.edu
  * 
  * bits.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
@@ -189,6 +189,7 @@ int bitXor(int x, int y) {
   */
   return (~(x & y) & (~(~x & ~y)));
 }
+
 /* 
  * tmin - return minimum two's complement integer 
  *   Legal ops: ! ~ & ^ | + << >>
@@ -199,6 +200,7 @@ int tmin(void) {
   // this is simply putting 2^0 back by 32 powers of 2, leading to negative 32bit limit
   return 1 << 31;
 }
+
 //2
 /*
  * isTmax - returns 1 if x is the maximum, two's complement number,
@@ -208,8 +210,17 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return 2;
+  /*
+  Using a mask, ^ing it to the input int will give us either a 0 or another value.
+  Iff the value is 0, it is the max number. This first value is then !ed to provide a true or false output.
+    * Ex) !(1111 ^ 1001) = !(0110) = 0
+    * Ex) !(1111 ^ 1111) = ~(0)    = 1
+  */
+
+  int max = 0x7FFFFFFF;
+  return !(max ^ x);
 }
+
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
  *   where bits are numbered from 0 (least significant) to 31 (most significant)
@@ -220,7 +231,7 @@ int isTmax(int x) {
  */
 int allOddBits(int x) {
   /*
-  Using a mask, comparing it to the input int will cause all bits but odd ones to either become a 0 or 1
+  Using a mask, &ing it to the input int will cause all bits but odd ones to either become a 0 or 1
     * Ex) 1101 & 1010 is 1000
   Once calculated, if the string still matches the string when XOR-ed, it will return 0.
   This is then inverted to present the true value. If they do not match, it will lead to some other value
@@ -231,6 +242,7 @@ int allOddBits(int x) {
   int mask = 0xAAAAAAAA; // Mask with all odd bits set to 1
   return !((x & mask) ^ mask);
 }
+
 /* 
  * negate - return -x 
  *   Example: negate(1) = -1.
@@ -250,6 +262,7 @@ int negate(int x) {
   */
   return ~x + 1;
 }
+
 //3
 /* 
  * isAsciiDigit - return 1 if 0x30 <= x <= 0x39 (ASCII codes for characters '0' to '9')
@@ -263,6 +276,7 @@ int negate(int x) {
 int isAsciiDigit(int x) {
   return 2;
 }
+
 /* 
  * conditional - same as x ? y : z 
  *   Example: conditional(2,4,5) = 4
@@ -271,8 +285,14 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
+  /*
+  x ? y : z
+  if x is 0, z is output. 
+  if x is 1, y is output.
+  */
   return 2;
 }
+
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
  *   Example: isLessOrEqual(4,5) = 1.
@@ -283,6 +303,7 @@ int conditional(int x, int y, int z) {
 int isLessOrEqual(int x, int y) {
   return 2;
 }
+
 //4
 /* 
  * logicalNeg - implement the ! operator, using all of 
@@ -292,9 +313,11 @@ int isLessOrEqual(int x, int y) {
  *   Max ops: 12
  *   Rating: 4 
  */
-int logicalNeg(int x) {
-  return 2;
+int logicalNeg(int x) {  
+  return ~(x ^ 1);
+
 }
+
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
  *  Examples: howManyBits(12) = 5
@@ -310,6 +333,7 @@ int logicalNeg(int x) {
 int howManyBits(int x) {
   return 0;
 }
+
 //float
 /* 
  * floatScale2 - Return bit-level equivalent of expression 2*f for
@@ -325,6 +349,7 @@ int howManyBits(int x) {
 unsigned floatScale2(unsigned uf) {
   return 2;
 }
+
 /* 
  * floatFloat2Int - Return bit-level equivalent of expression (int) f
  *   for floating point argument f.
@@ -340,6 +365,7 @@ unsigned floatScale2(unsigned uf) {
 int floatFloat2Int(unsigned uf) {
   return 2;
 }
+
 /* #include "floatPower2.c" commented by Weinstock request by MCV 20210929-1619 */
 /* 
  * floatNegate - Return bit-level equivalent of expression -f for
@@ -353,5 +379,5 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 2
  */
 unsigned floatNegate(unsigned uf) {
- return 2;
+  return 2;
 }
