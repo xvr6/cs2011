@@ -212,12 +212,19 @@ int tmin(void) {
 int isTmax(int x) {
   /*
   Using a mask, ^ing it to the input int will give us either a 0 or another value.
+  To create the mask we just start with 0x7F, left shift by 8 and | with 0xFF. This
+  constructs the max integer of 0x7FFFFFFF after 3 iterations.
   Iff the value is 0, it is the max number. This first value is then !ed to provide a true or false output.
     * Ex) !(1111 ^ 1001) = !(0110) = 0
     * Ex) !(1111 ^ 1111) = ~(0)    = 1
   */
 
-  int max = 0x7FFFFFFF;
+  int _max = 0x7FFFFFFF; // here for debugging.
+  int component = 0x000000FF;
+  int max = (0x7F << 8) | component;
+      max = (max << 8)  | component;
+      max = (max << 8)  | component;
+  
   return !(max ^ x);
 }
 
@@ -239,7 +246,12 @@ int allOddBits(int x) {
    * Ex) 1000 ^ 1010 is 0010. This is not all 0s, therefor it will lead to a false output when !ed.
    * Ex2) 1010 ^ 1010 is 0000. Once !d, it becomes 0001 
   */
-  int mask = 0xAAAAAAAA; // Mask with all odd bits set to 1
+  int _mask = 0xAAAAAAAA; // Mask with all odd bits set to 1
+
+  int component = 0xAA;
+  int mask = 0xAA << 8 | component;
+      mask = mask << 8 | component;
+      mask = mask << 8 | component;
   return !((x & mask) ^ mask);
 }
 
