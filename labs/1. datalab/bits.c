@@ -239,7 +239,16 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  /* NOTE: x-yyy where x is sign bit and y is integer
+  Since the sign bit is the most significant bit, all we need to do is 
+  just invert all the bits.
+    * Ex) (4) ~0-100 is 1-011.
+  This will cause an off by one error as, for the sake of understanding, 
+  consider 0 (0-000) to be part of the positive numbers. This means we 
+  must add 1 to the final result.
+    * 1-011 + 1 is 1-100.
+  */
+  return ~x + 1;
 }
 //3
 /* 
