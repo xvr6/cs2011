@@ -178,6 +178,15 @@ NOTES:
  *   Rating: 1
  */
 int bitXor(int x, int y) {
+  /* 
+  The left side of this equation (~(x&y)) ensures any paring of bits 
+  that contain at least one 0 are true. (Anything that isnt double 1s)
+    * Ex: ~(0101 & 1001) is 1110.
+  The right side of this equation (~(~x & ~y)) ensures any double 0s are false.
+    * Ex: ~(~0101 & ~1001) = ~(0010) = 1101
+  Combining these, we complete the XOR
+    * Ex: 1110 & 1101 is 1100
+  */
   return (~(x & y) & (~(~x & ~y)));
 }
 /* 
@@ -187,6 +196,7 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmin(void) {
+  // this is simply putting 2^0 back by 32 powers of 2, leading to negative 32bit limit
   return 1 << 31;
 }
 //2
@@ -209,7 +219,17 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+  /*
+  Using a mask, comparing it to the input int will cause all bits but odd ones to either become a 0 or 1
+    * Ex) 1101 & 1010 is 1000
+  Once calculated, if the string still matches the string when XOR-ed, it will return 0.
+  This is then inverted to present the true value. If they do not match, it will lead to some other value
+  and be turned into a 0 by the !
+   * Ex) 1000 ^ 1010 is 0010. This is not all 0s, therefor it will lead to a false output when !ed.
+   * Ex2) 1010 ^ 1010 is 0000. Once !d, it becomes 0001 
+  */
+  int mask = 0xAAAAAAAA; // Mask with all odd bits set to 1
+  return !((x & mask) ^ mask);
 }
 /* 
  * negate - return -x 
