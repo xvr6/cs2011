@@ -180,8 +180,8 @@ NOTES:
 int bitXor(int x, int y) {
   /* 
   The left side of this equation (~(x&y)) ensures any paring of bits 
-  that contain at least one 0 are true. (Anything that isnt double 1s)
-    * Ex: ~(0101 & 1001) is 1110.
+   that contain at least one 0 are true. (Anything that isnt double 1s)
+    * Ex: ~(0101 & 1001) is 1110
   The right side of this equation (~(~x & ~y)) ensures any double 0s are false.
     * Ex: ~(~0101 & ~1001) = ~(0010) = 1101
   Combining these, we complete the XOR
@@ -211,10 +211,10 @@ int tmin(void) {
  */
 int isTmax(int x) {
   /*
-  Using a mask, ^ing it to the input int will give us either a 0 or another value.
+  Using a mask, ^ing it to the input int will give us either a 0 or another value
   To create the mask we just start with 0x7F, left shift by 8 and | with 0xFF. This
-  constructs the max integer of 0x7FFFFFFF after 3 iterations.
-  Iff the value is 0, it is the max number. This first value is then !ed to provide a true or false output.
+   constructs the max integer of 0x7FFFFFFF after 3 iterations
+  Iff the value is 0, it is the max number. This first value is then !ed to provide a true or false output
     * Ex) !(1111 ^ 1001) = !(0110) = 0
     * Ex) !(1111 ^ 1111) = ~(0)    = 1
   */
@@ -222,8 +222,8 @@ int isTmax(int x) {
   int _max = 0x7FFFFFFF; // here for debugging.
   int component = 0x000000FF;
   int max = (0x7F << 8) | component;
-      max = (max << 8)  | component;
-      max = (max << 8)  | component;
+      max = (max  << 8) | component;
+      max = (max  << 8) | component;
   
   return !(max ^ x);
 }
@@ -242,11 +242,11 @@ int allOddBits(int x) {
     * Ex) 1101 & 1010 is 1000
   Once calculated, if the string still matches the string when XOR-ed, it will return 0.
   This is then inverted to present the true value. If they do not match, it will lead to some other value
-  and be turned into a 0 by the !
-   * Ex) 1000 ^ 1010 is 0010. This is not all 0s, therefor it will lead to a false output when !ed.
+   and be turned into a 0 by the !
+   * Ex) 1000 ^ 1010 is 0010. This is not all 0s, therefor it will lead to a false output when !ed
    * Ex2) 1010 ^ 1010 is 0000. Once !d, it becomes 0001 
   */
-  int _mask = 0xAAAAAAAA; // Mask with all odd bits set to 1
+  int _mask = 0xAAAAAAAA; // here for debugging
 
   int component = 0xAA;
   int mask = 0xAA << 8 | component;
@@ -265,11 +265,11 @@ int allOddBits(int x) {
 int negate(int x) {
   /* NOTE: x-yyy where x is sign bit and y is integer
   Since the sign bit is the most significant bit, all we need to do is 
-  just invert all the bits.
+   just invert all the bits.
     * Ex) (4) ~0-100 is 1-011.
   This will cause an off by one error as, for the sake of understanding, 
-  consider 0 (0-000) to be part of the positive numbers. This means we 
-  must add 1 to the final result.
+   consider 0 (0-000) to be part of the positive numbers. This means we 
+   must add 1 to the final result.
     * 1-011 + 1 is 1-100.
   */
   return ~x + 1;
@@ -286,7 +286,15 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+  /*
+  This function checks if the input integer x is within the ASCII range for digits '0' to '9'.
+  The first condition checks if x is greater than or equal to 0x30.
+  The second condition checks if x is less than or equal to 0x39.
+  Both conditions are combined using the AND operator to return 1 if both are true, otherwise 0.
+  */
+  int lowerBound = 0x30;
+  int upperBound = 0x39;
+  return !((x + (~lowerBound + 1)) >> 31) & !((upperBound + (~x + 1)) >> 31);
 }
 
 /* 
@@ -297,12 +305,18 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  /*
-  x ? y : z
-  if x is 0, z is output. 
-  if x is 1, y is output.
+  /* 
+  The first part of this code converts x to 0 (if it wasn't 0 to begin with) 
+   or 1 if it was 0 to begin with.
+   
+  We then create a mask of all 1s if x is not 0, or all 0s if x is 0.
+  (mask & y) | (~mask & z) combines the results of the previous two operations 
+   using the | operator. The resulting number will have bits set to 1 if they 
+   were set to 1 in either mask & y or ~mask & z.
   */
-  return 2;
+  int mask = !!x;
+  mask = ~mask + 1; 
+  return (mask & y) | (~mask & z);
 }
 
 /* 
@@ -313,7 +327,17 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  /*
+  This function checks if x is less than or equal to y.
+  First, it calculates the difference between y and x.
+  Then, it checks if the difference is non-negative.
+  It also handles the case where x and y have different signs.
+  */
+  int diff = y + (~x + 1);
+  int xNeg = x >> 31 & 1;
+  int yNeg = y >> 31 & 1;
+  int diffNeg = diff >> 31 & 1;
+  return (xNeg & !yNeg) | (!(xNeg ^ yNeg) & !diffNeg);
 }
 
 //4
@@ -326,9 +350,8 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {  
-
   /*
-  The first part of this function (x | (~x + 1)) |s x to its negation.
+  The first part of this function (x | (~x + 1)) turns x into its negative form.
   This is done as with every number but 0, on a ~ operation, the sign bit will flip. 
     * 1-1010101 | (~1-1010101 + 1) = 1-1010101 | 0-0101011 = 1-1111111.
     * 0000      | (~0100 + 1)      = 0000     | 0100       = 0100
@@ -352,7 +375,39 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
-  return 0;
+    /*
+    The first part of this code is variable definitions. The sign function determines
+     if a number is positive or negative as >> 31 any number will result in -1 for negative
+     and 0 for non-negative.
+
+    The next secetion of code, 'x = (sign...' is an absolute value.
+     if x is negative, (sign & ~x) will result in the bitwise not of x.
+     if x is non negative, (~sign & x) will result in x
+
+    The 3rd section, specifically '!!(x >> 16) << 4' checks if any of the higher 16 bits are set. 
+    If so, it returns 1, otherwise 0. This rest is then shifted left by 4 bits (<< 4), effectively multiplying it by 16.
+    this is then repeted with a narrowing shift.
+
+    These numbers are then added together to give the final count.
+    */
+    int b16, b8, b4, b2, b1, b0;
+    int sign = x >> 31;
+
+    x = (sign & ~x) | (~sign & x);
+
+    b16 = !!(x >> 16) << 4;
+    x = x >> b16;
+    b8 = !!(x >> 8) << 3;
+    x = x >> b8;
+    b4 = !!(x >> 4) << 2;
+    x = x >> b4;
+    b2 = !!(x >> 2) << 1;
+    x = x >> b2;
+    b1 = !!(x >> 1);
+    x = x >> b1;
+    b0 = x;
+
+    return b16 + b8 + b4 + b2 + b1 + b0 + 1;
 }
 
 //float
@@ -368,7 +423,34 @@ int howManyBits(int x) {
  *   Rating: 4
  */
 unsigned floatScale2(unsigned uf) {
-  return 2;
+  /*
+  This code takes an unsigned integer and returns that number multiplied by 2
+  1. Extract the sign, exponent, and fraction parts from the input.
+  2. If the exponent is all 1s (0xFF), the number is either NaN or infinity, so return it as is.
+  3. If the exponent is zero, the number is denormalized, so shift the fraction left by 1.
+  4. If the exponent is non-zero, increment the exponent by 1.
+  5. If incrementing the exponent results in it becoming 0xFF, set the fraction to 0 to represent infinity.
+  6. Combine the sign, updated exponent, and fraction back into a single unsigned integer and return it.
+  */
+  unsigned sign = uf & 0x80000000;
+  unsigned exp  = (uf & 0x7F800000) >> 23;
+  unsigned frac = uf & 0x007FFFFF;
+
+  if (exp == 0xFF) {
+    return uf; // NaN or infinity
+  }
+
+  if (exp == 0) {
+    frac <<= 1; // Denormalized values
+  } else {
+    exp += 1; // Normalized values
+  }
+
+  if (exp == 0xFF) {
+    frac = 0; // Overflow to infinity
+  }
+
+  return sign | (exp << 23) | frac;
 }
 
 /* 
@@ -384,7 +466,29 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-  return 2;
+  /*
+  This code converts a floating-point number to an integer. 
+  1. It extracts the exponent and adjusts it by subtracting 127 (the bias).
+  2. It extracts the fraction part and adds the implicit leading 1.
+  3. If the exponent is too large (>= 31), it returns the minimum signed integer value (overflow).
+  4. If the exponent is negative, it returns 0 (underflow).
+  5. Depending on the exponent, it shifts the fraction left or right to convert it to an integer.
+  6. Finally, it returns the integer, negating it if the sign bit is set.
+  */
+  unsigned sign = uf >> 31;
+  int exp = ((uf >> 23) & 0xFF) - 127;
+  unsigned frac = (uf & 0x007FFFFF) | 0x00800000;
+
+  if (exp >= 31) {
+    return 0x80000000u;
+  }
+  if (exp < 0) {
+    return 0;
+  }
+
+  frac = (exp > 23) ? (frac << (exp - 23)) : (frac >> (23 - exp));
+
+  return sign ? -frac : frac;
 }
 
 /* #include "floatPower2.c" commented by Weinstock request by MCV 20210929-1619 */
@@ -400,5 +504,19 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 2
  */
 unsigned floatNegate(unsigned uf) {
-  return 2;
+  /*
+  This code checks if the given floating-point number is NaN (Not a Number).
+  It uses a mask to ignore the sign bit and checks if the exponent bits are 
+    all 1s and the fraction bits are non-zero.
+  If 'uf' is NaN, it returns 'uf' unchanged.
+  Otherwise, it flips the sign bit of 'uf' and returns the result.
+  */
+  unsigned mask = 0x7FFFFFFF;
+  unsigned nanCheck = 0x7F800000;
+
+  if ((uf & mask) > nanCheck) {
+      return uf;
+  }
+
+  return uf ^ 0x80000000;
 }
