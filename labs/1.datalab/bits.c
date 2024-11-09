@@ -210,21 +210,12 @@ int tmin(void) {
  */
 int isTmax(int x) {
     /*
-    Using a mask, ^ing it to the input int will give us either a 0 or another value
-    To create the mask we just start with 0x7F, left shift by 8 and | with 0xFF. This
-     constructs the max integer of 0x7FFFFFFF after 3 iterations
-    Iff the value is 0, it is the max number. This first value is then !ed to provide a true or false output
-      * Ex) !(1111 ^ 1001) = !(0110) = 0
-      * Ex) !(1111 ^ 1111) = ~(0)    = 1
+    The maximum two's complement number is 0x7FFFFFFF.
+    We can use the property that Tmax + 1 = Tmin (0x80000000) and Tmax + Tmax + 1 = -1.
+    We need to ensure x is not -1, as -1 also satisfies the above property.
     */
-
-    int _max = 0x7FFFFFFF;  // here for debugging.
-    int component = 0x000000FF;
-    int max = (0x7F << 8) | component;
-    max = (max << 8) | component;
-    max = (max << 8) | component;
-
-    return !(max ^ x);
+    int tmin = x + 1;
+    return !(tmin + x + 1) & !!tmin;
 }
 
 /*
