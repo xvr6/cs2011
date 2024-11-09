@@ -296,13 +296,13 @@ int isAsciiDigit(int x) {
  */
 int conditional(int x, int y, int z) {
     /*
-    The first part of this code converts x to 0 (if it wasn't 0 to begin with)
-     or 1 if it was 0 to begin with.
-
-    We then create a mask of all 1s if x is not 0, or all 0s if x is 0.
-    (mask & y) | (~mask & z) combines the results of the previous two operations
-     using the | operator. The resulting number will have bits set to 1 if they
-     were set to 1 in either mask & y or ~mask & z.
+    This function mimics the ternary operator (x ? y : z).
+    First, we convert x to a boolean value (0 or 1) using !!x.
+    Then, we create a mask that is all 1s if x is non-zero, or all 0s if x is zero.
+    Finally, we use the mask to select between y and z:
+    - If x is non-zero, the mask is all 1s, so (mask & y) gives y and (~mask & z) gives 0.
+    - If x is zero, the mask is all 0s, so (mask & y) gives 0 and (~mask & z) gives z.
+    The result is either y or z, depending on the value of x.
     */
     int mask = !!x;
     mask = ~mask + 1;
@@ -344,7 +344,7 @@ int logicalNeg(int x) {
     The first part of this function (x | (~x + 1)) turns x into its negative form.
     This is done as with every number but 0, on a ~ operation, the sign bit will flip.
       * 1-1010101 | (~1-1010101 + 1) = 1-1010101 | 0-0101011 = 1-1111111.
-      * 0000      | (~0100 + 1)      = 0000     | 0100       = 0100
+      * 0000      | (~0100 + 1)      = 0000      | 0100      = 0100
     We then right shift 31 times to have the rignbit in the lowest position possible.
     1 is then added to change the value to true if it is 0.
     */
