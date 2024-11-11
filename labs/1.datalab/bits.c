@@ -236,7 +236,7 @@ int allOddBits(int x) {
      * Ex) 1000 ^ 1010 is 0010. This is not all 0s, therefor it will lead to a false output when !ed
      * Ex2) 1010 ^ 1010 is 0000. Once !d, it becomes 0001
     */
-    int _mask = 0xAAAAAAAA;  // here for debugging
+    // int _mask = 0xAAAAAAAA;  // here for debugging
 
     int component = 0xAA;
     int mask = 0xAA << 8 | component;
