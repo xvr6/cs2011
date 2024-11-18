@@ -10,3 +10,5 @@
 !.gitignore
 !dlc
 !*.png
+!bomb
+!*.txt
