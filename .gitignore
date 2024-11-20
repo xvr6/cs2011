@@ -12,3 +12,4 @@
 !*.png
 !bomb
 !*.txt
+!.gdbinit
