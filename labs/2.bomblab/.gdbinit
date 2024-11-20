@@ -2,6 +2,8 @@ file ./bomb
 
 set disassembly-flavor att
 
+b phase_1
+
 b phase_2
 
 b phase_3
