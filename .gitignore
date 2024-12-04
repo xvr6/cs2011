@@ -13,3 +13,7 @@
 !bomb
 !*.txt
 !.gdbinit
+!ctarget
+!rtarget
+!hex2raw
+!*.S
