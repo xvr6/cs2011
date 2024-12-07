@@ -17,3 +17,5 @@
 !rtarget
 !hex2raw
 !*.S
+!*.s
+!*.bin
