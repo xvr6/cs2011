@@ -1,5 +1,7 @@
 This file contains materials for one instance of the attacklab.
 
+My target is #88
+
 Files:
 
     ctarget
